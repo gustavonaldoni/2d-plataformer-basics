@@ -10,6 +10,10 @@
 #include "headers/utils.h"
 #include "headers/player.h"
 #include "headers/floor.h"
+#include "headers/collision.h"
+
+#define GRAVITY 20.0f
+#define PLAYER_JUMP_SPEED 250.0f
 
 int main()
 {
@@ -18,22 +22,66 @@ int main()
 	int screenConstant = 300;
 	InitWindow(4 * screenConstant, 3 * screenConstant, "2D Plataformer");
 
-	Player player = CreatePlayer(0,0);
+	Player player = CreatePlayer(0, 0);
 	player.x = (GetScreenWidth() - player.size) / 2;
 	player.y = (GetScreenHeight() - player.size) / 2 - GetScreenHeight() / 5;
 
-	Floor floor = CreateFloor(0, 0, 500, 50);
-	floor.x = (GetScreenWidth() - floor.width) / 2;
-	floor.y = (GetScreenHeight() - floor.height) / 2;
-	
+	Floor floors[3] = {CreateFloor(0, 0, 500, 50),
+					   CreateFloor(0, 0, 200, 50),
+					   CreateFloor(0, 0, 200, 50)};
+
+	floors[0].x = (GetScreenWidth() - floors[0].width) / 2;
+	floors[0].y = (GetScreenHeight() - floors[0].height) / 2;
+
+	floors[1].x = (GetScreenWidth() - floors[1].width) / 2 - GetScreenWidth() / 4;
+	floors[1].y = (GetScreenHeight() - floors[1].height) / 2 + GetScreenHeight() / 5;
+
+	floors[2].x = (GetScreenWidth() - floors[2].width) / 2 + GetScreenWidth() / 5;
+	floors[2].y = (GetScreenHeight() - floors[2].height) / 2 + GetScreenHeight() / 4;
+
 	SetTargetFPS(144);
 	while (!WindowShouldClose())
 	{
+		printf("player.speedY = %f\n", player.speedY);
+		if (player.canJump)
+			printf("CAN jump\n");
+		
+		else if (!player.canJump)
+			printf("CANNOT jump\n");
+
+		if (IsKeyDown(KEY_A))
+			player.x -= player.speedX * GetFrameTime();
+
+		if (IsKeyDown(KEY_D))
+			player.x += player.speedX * GetFrameTime();
+
+		if (!CheckCollisionPlayerFloors(player, floors, 3))
+		{
+			player.y += player.speedY * GetFrameTime();
+			player.speedY += GRAVITY * GetFrameTime();
+
+			player.canJump = false;
+		}
+
+		else if (CheckCollisionPlayerFloors(player, floors, 3))
+		{
+			player.canJump = true;
+		}
+
+		if (IsKeyDown(KEY_SPACE) && player.canJump == true)
+		{
+			player.speedY *= -1;
+			player.canJump = false;
+
+			player.y += player.speedY * GetFrameTime();
+			player.speedY += GRAVITY * GetFrameTime();
+		}
+
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
 
 		DrawPlayer(player);
-		DrawFloor(floor);
+		DrawFloors(floors, 3);
 
 		EndDrawing();
 	}

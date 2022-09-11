@@ -3,6 +3,7 @@ typedef struct
     float x, y;
     float size;
     float speedX, speedY;
+    bool canJump;
     Color color;
 } Player;
 
@@ -13,7 +14,8 @@ Player CreatePlayer(float x, float y)
 {
     return (Player){x, y,
                     50, 
-                    GenerateRandomNumber(100, 200), GenerateRandomNumber(100, 200),
+                    300, 200,
+                    false,
                     (Color){GenerateRandomNumber(0, 100), GenerateRandomNumber(0, 100), GenerateRandomNumber(0, 100), 255}};
 }
 
