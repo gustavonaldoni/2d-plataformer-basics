@@ -12,9 +12,9 @@ void DrawPlayer(Player);
 Player CreatePlayer(float x, float y)
 {
     return (Player){x, y,
-                    GenerateRandomNumber(50, 80), 
+                    50, 
                     GenerateRandomNumber(100, 200), GenerateRandomNumber(100, 200),
-                    (Color){GenerateRandomNumber(0, 255), GenerateRandomNumber(0, 255), GenerateRandomNumber(0, 255), 255}};
+                    (Color){GenerateRandomNumber(0, 100), GenerateRandomNumber(0, 100), GenerateRandomNumber(0, 100), 255}};
 }
 
 void DrawPlayer(Player player)
