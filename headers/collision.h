@@ -1,5 +1,5 @@
 bool CheckCollisionPlayerFloor(Player, Floor);
-bool CheckCollisionPlayerFloors(Player, Floor*, int);
+bool CheckCollisionPlayerFloors(Player, Floor *, int);
 
 bool CheckCollisionPlayerFloor(Player player, Floor floor)
 {

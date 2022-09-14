@@ -12,6 +12,7 @@
         "turn.h": "c",
         "checkwin.h": "c",
         "devname.h": "c",
-        "floor.h": "c"
+        "floor.h": "c",
+        "timer.h": "c"
     }
 }
