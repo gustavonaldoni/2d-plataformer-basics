@@ -11,9 +11,9 @@
 #include "headers/player.h"
 #include "headers/floor.h"
 #include "headers/collision.h"
+#include "headers/timer.h"
 
-#define GRAVITY 20.0f
-#define PLAYER_JUMP_SPEED 250.0f
+#define GRAVITY 300.0f
 
 int main()
 {
@@ -55,6 +55,15 @@ int main()
 		if (IsKeyDown(KEY_D))
 			player.x += player.speedX * GetFrameTime();
 
+		if (IsKeyDown(KEY_SPACE) && player.canJump)
+		{
+			player.speedY = -player.speedY;
+			player.canJump = false;
+
+			player.y += player.speedY * GetFrameTime();
+			player.speedY += GRAVITY * GetFrameTime();
+		}
+
 		if (!CheckCollisionPlayerFloors(player, floors, 3))
 		{
 			player.y += player.speedY * GetFrameTime();
@@ -66,15 +75,6 @@ int main()
 		else if (CheckCollisionPlayerFloors(player, floors, 3))
 		{
 			player.canJump = true;
-		}
-
-		if (IsKeyDown(KEY_SPACE) && player.canJump == true)
-		{
-			player.speedY *= -1;
-			player.canJump = false;
-
-			player.y += player.speedY * GetFrameTime();
-			player.speedY += GRAVITY * GetFrameTime();
 		}
 
 		BeginDrawing();
