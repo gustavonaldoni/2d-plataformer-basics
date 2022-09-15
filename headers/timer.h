@@ -1,29 +1,38 @@
 typedef struct
 {
-    float quantity;
+    float initialSeconds;
+    float currentSeconds;
 } Timer;
 
-Timer CreateTimer(float);
-void ResetTimer(Timer *, float);
-void ZeroTimer(Timer *);
-void UpdateTimer(Timer *);
+Timer TimerCreate(float);
+void TimerReset(Timer *);
+bool TimerIsDone(Timer);
+void TimerUpdate(Timer *);
 
-Timer CreateTimer(float initialQuantity)
+Timer TimerCreate(float initialSeconds)
 {
-    return (Timer){initialQuantity};
+    Timer timer;
+
+    timer.currentSeconds = initialSeconds;
+    timer.initialSeconds = initialSeconds;
+
+    return timer;
 }
 
-void ResetTimer(Timer *timer, float quantity)
+void TimerReset(Timer *timer)
 {
-    timer->quantity = quantity;
+    timer->currentSeconds = timer->initialSeconds;
 }
 
-void ZeroTimer(Timer *timer)
+bool TimerIsDone(Timer timer)
 {
-    timer->quantity = 0.0f;
+    return timer.currentSeconds <= 0.0f;
 }
 
-void UpdateTimer(Timer *timer)
+void TimerUpdate(Timer *timer)
 {
-    timer->quantity -= GetFrameTime();
+    if (!TimerIsDone(*timer))
+    {
+        timer->currentSeconds -= GetFrameTime();
+    }
 }

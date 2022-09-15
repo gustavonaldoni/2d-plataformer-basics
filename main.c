@@ -8,11 +8,12 @@
 // Compile with: gcc main.c -o game.exe -O1 -Wall -std=c99 -Wno-missing-braces -I include/ -L lib -lraylib -lopengl32 -lgdi32 -lwinmm
 
 #include "headers/utils.h"
+#include "headers/timer.h"
+#include "headers/stopwatch.h"
 #include "headers/player.h"
 #include "headers/floor.h"
 #include "headers/bullet.h"
 #include "headers/collision.h"
-#include "headers/timer.h"
 
 #define GRAVITY 350.0f
 #define MAX_SPEEDY 450.0f
