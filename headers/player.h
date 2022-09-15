@@ -1,4 +1,4 @@
-typedef struct 
+typedef struct
 {
     float x, y;
     float size;
@@ -14,7 +14,7 @@ void DrawPlayer(Player);
 Player CreatePlayer(float x, float y)
 {
     return (Player){x, y,
-                    50, 
+                    50,
                     300, 200,
                     false, false,
                     (Color){GenerateRandomNumber(0, 100), GenerateRandomNumber(0, 100), GenerateRandomNumber(0, 100), 255}};
@@ -22,7 +22,7 @@ Player CreatePlayer(float x, float y)
 
 void DrawPlayer(Player player)
 {
-    DrawRectangle(player.x, player.y, 
+    DrawRectangle(player.x, player.y,
                   player.size, player.size,
                   player.color);
 }

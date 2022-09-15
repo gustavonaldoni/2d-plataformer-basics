@@ -13,6 +13,7 @@
         "checkwin.h": "c",
         "devname.h": "c",
         "floor.h": "c",
-        "timer.h": "c"
+        "timer.h": "c",
+        "collision.h": "c"
     }
 }

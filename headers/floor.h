@@ -7,7 +7,7 @@ typedef struct
 
 Floor CreateFloor(float, float, float, float);
 void DrawFloor(Floor);
-void DrawFloors(Floor*, int);
+void DrawFloors(Floor *, int);
 
 Floor CreateFloor(float x, float y, float width, float height)
 {
