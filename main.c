@@ -12,8 +12,12 @@
 #include "headers/floor.h"
 #include "headers/collision.h"
 #include "headers/timer.h"
+#include "headers/bullet.h"
 
-#define GRAVITY 300.0f
+#define GRAVITY 350.0f
+#define MAX_SPEEDY 450.0f
+
+#define MAX_BULLETS 5
 
 int main()
 {
@@ -38,6 +42,10 @@ int main()
 
 	floors[2].x = (GetScreenWidth() - floors[2].width) / 2 + GetScreenWidth() / 5;
 	floors[2].y = (GetScreenHeight() - floors[2].height) / 2 + GetScreenHeight() / 4;
+
+	Bullet bullets[5];
+	CleanBullets(bullets, MAX_BULLETS);
+	CreateBullets(bullets, MAX_BULLETS);
 
 	SetTargetFPS(144);
 	while (!WindowShouldClose())
@@ -69,6 +77,9 @@ int main()
 			player.y += player.speedY * GetFrameTime();
 			player.speedY += GRAVITY * GetFrameTime();
 
+			if (player.speedY > MAX_SPEEDY)
+				player.speedY = MAX_SPEEDY;
+
 			player.canJump = false;
 		}
 
@@ -77,11 +88,15 @@ int main()
 			player.canJump = true;
 		}
 
+		MoveBullets(bullets, MAX_BULLETS);
+
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
 
 		DrawPlayer(player);
 		DrawFloors(floors, 3);
+
+		DrawBullets(bullets, MAX_BULLETS);
 
 		EndDrawing();
 	}
