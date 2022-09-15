@@ -10,9 +10,9 @@
 #include "headers/utils.h"
 #include "headers/player.h"
 #include "headers/floor.h"
+#include "headers/bullet.h"
 #include "headers/collision.h"
 #include "headers/timer.h"
-#include "headers/bullet.h"
 
 #define GRAVITY 350.0f
 #define MAX_SPEEDY 450.0f
@@ -43,7 +43,7 @@ int main()
 	floors[2].x = (GetScreenWidth() - floors[2].width) / 2 + GetScreenWidth() / 5;
 	floors[2].y = (GetScreenHeight() - floors[2].height) / 2 + GetScreenHeight() / 4;
 
-	Bullet bullets[5];
+	Bullet bullets[MAX_BULLETS];
 	CleanBullets(bullets, MAX_BULLETS);
 	CreateBullets(bullets, MAX_BULLETS);
 
@@ -53,45 +53,59 @@ int main()
 		printf("player.speedY = %f\n", player.speedY);
 		if (player.canJump)
 			printf("CAN jump\n");
-		
+
 		else if (!player.canJump)
 			printf("CANNOT jump\n");
 
-		if (IsKeyDown(KEY_A))
-			player.x -= player.speedX * GetFrameTime();
-
-		if (IsKeyDown(KEY_D))
-			player.x += player.speedX * GetFrameTime();
-
-		if (IsKeyDown(KEY_SPACE) && player.canJump)
+		if (player.lost == false)
 		{
-			player.speedY = -player.speedY;
-			player.canJump = false;
+			if (IsKeyDown(KEY_A))
+				player.x -= player.speedX * GetFrameTime();
 
-			player.y += player.speedY * GetFrameTime();
-			player.speedY += GRAVITY * GetFrameTime();
+			if (IsKeyDown(KEY_D))
+				player.x += player.speedX * GetFrameTime();
+
+			if (IsKeyDown(KEY_SPACE) && player.canJump)
+			{
+				player.speedY = -player.speedY;
+				player.canJump = false;
+
+				player.y += player.speedY * GetFrameTime();
+				player.speedY += GRAVITY * GetFrameTime();
+			}
+
+			if (!CheckCollisionPlayerFloors(player, floors, 3))
+			{
+				player.y += player.speedY * GetFrameTime();
+				player.speedY += GRAVITY * GetFrameTime();
+
+				if (player.speedY > MAX_SPEEDY)
+					player.speedY = MAX_SPEEDY;
+
+				player.canJump = false;
+			}
+
+			else if (CheckCollisionPlayerFloors(player, floors, 3))
+			{
+				player.canJump = true;
+			}
+
+			if (CheckCollisionPlayerBullets(player, bullets, MAX_BULLETS))
+			{
+				player.lost = true;
+			}
+
+			MoveBullets(bullets, MAX_BULLETS);
 		}
 
-		if (!CheckCollisionPlayerFloors(player, floors, 3))
-		{
-			player.y += player.speedY * GetFrameTime();
-			player.speedY += GRAVITY * GetFrameTime();
-
-			if (player.speedY > MAX_SPEEDY)
-				player.speedY = MAX_SPEEDY;
-
-			player.canJump = false;
-		}
-
-		else if (CheckCollisionPlayerFloors(player, floors, 3))
-		{
-			player.canJump = true;
-		}
-
-		MoveBullets(bullets, MAX_BULLETS);
+		
 
 		BeginDrawing();
-		ClearBackground(RAYWHITE);
+
+		if (player.lost)
+			ClearBackground(BLACK);
+		else
+			ClearBackground(RAYWHITE);
 
 		DrawPlayer(player);
 		DrawFloors(floors, 3);
